@@ -1,16 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400&display=swap');
 
 :root {
-  color-scheme: dark;
-  font-family: 'Exo 2', system-ui, sans-serif;
-  --neon-blue: #00f3ff;
-  --neon-pink: #ff00ff;
-  --neon-purple: #bc13fe;
-  --bg-dark: #050510;
-  --glass-bg: rgba(10, 10, 25, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --text-main: #ffffff;
-  --text-muted: #a0a0b0;
+  color-scheme: light;
+  /* Switch to light/neutral */
+  font-family: 'Inter', sans-serif;
+  --text-main: #333333;
+  --text-muted: #888888;
+  --bg-overlay: rgba(255, 255, 255, 0.8);
 }
 
 * {
@@ -22,7 +18,8 @@
 
 body {
   min-height: 100vh;
-  background-color: var(--bg-dark);
+  background-color: #f0f0f0;
+  /* Matches fog color */
   overflow: hidden;
   color: var(--text-main);
 }
@@ -46,93 +43,82 @@ body {
   pointer-events: none;
   display: flex;
   flex-direction: column;
-  padding: 2rem;
+  padding: 4rem;
 }
 
-/* Score Display */
+/* Score Display - Ultra Minimal */
 .score-display {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 4rem;
-  font-weight: 900;
-  color: transparent;
-  -webkit-text-stroke: 2px var(--neon-blue);
-  text-shadow: 0 0 20px var(--neon-blue);
+  font-weight: 100;
+  font-size: 6rem;
+  color: var(--text-main);
   text-align: center;
-  margin-top: 2rem;
-  opacity: 0.8;
-  transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  margin-top: 4rem;
+  opacity: 0.6;
+  letter-spacing: -2px;
 }
 
-/* Modal Card (Game Over / Start) */
+/* Modal Card - Clean Typography */
 .modal-card {
   pointer-events: auto;
   margin: auto;
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  padding: 3rem;
+  background: transparent;
+  /* No card background, just floating text */
   text-align: center;
   max-width: 400px;
-  width: 90%;
-  box-shadow:
-    0 0 40px rgba(0, 243, 255, 0.1),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  width: 100%;
   transform: translateY(0);
-  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .modal-card.hidden {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(10px);
   pointer-events: none;
 }
 
 .modal-card h1 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 2.5rem;
+  font-weight: 300;
+  font-size: 3rem;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  color: var(--text-main);
+  letter-spacing: -1px;
+  text-transform: lowercase;
 }
 
 .modal-card h2 {
-  font-family: 'Orbitron', sans-serif;
+  font-weight: 300;
   font-size: 1.5rem;
-  color: var(--neon-pink);
-  margin-bottom: 1.5rem;
-  text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+  color: var(--text-main);
+  margin-bottom: 2rem;
 }
 
 .modal-card p {
   color: var(--text-muted);
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   line-height: 1.6;
+  font-weight: 300;
   margin-bottom: 2rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .modal-card span {
-  color: var(--neon-blue);
-  font-weight: 600;
-  text-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+  color: var(--text-main);
+  font-weight: 400;
+  border-bottom: 1px solid var(--text-main);
 }
 
-/* Loading Overlay */
+/* Loading Overlay - Minimal */
 .loading-overlay {
   position: absolute;
   inset: 0;
-  background: #000;
+  background: #f0f0f0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 100;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.8s ease;
 }
 
 .loading-overlay.hidden {
@@ -141,35 +127,16 @@ body {
 }
 
 .loader-ring {
-  width: 80px;
-  height: 80px;
-  border: 4px solid rgba(0, 243, 255, 0.1);
-  border-top-color: var(--neon-blue);
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-top-color: var(--text-main);
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
 }
 
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
-}
-
-/* Button Style (if needed later) */
-.btn {
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 50px;
-  color: #fff;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(188, 19, 254, 0.6);
 }

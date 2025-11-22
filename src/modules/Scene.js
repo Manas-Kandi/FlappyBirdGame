@@ -6,18 +6,18 @@ import { Bird } from './Bird.js';
 import { CityGenerator } from './City.js';
 
 const CAMERA_CONFIG = {
-  fov: 60,
+  fov: 50, // Slightly narrower for a more cinematic/portrait feel
   near: 0.1,
-  far: 200,
-  startPosition: new THREE.Vector3(0, 2, 8),
+  far: 100,
+  startPosition: new THREE.Vector3(0, 1, 10),
 };
 
 const LIGHTING_CONFIG = {
-  ambient: 0.2,
-  directional: 1.5,
-  directionalColor: 0xffffff,
-  fogColor: 0x0b001a,
-  fogDensity: 0.02,
+  ambient: 0.6,
+  directional: 1.2,
+  directionalColor: 0xfff0dd, // Warm white
+  fogColor: 0xf0f0f0, // Soft white/grey
+  fogDensity: 0.035,
 };
 
 /**
@@ -32,14 +32,15 @@ export class SceneManager {
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
-      antialias: false, // Post-processing usually requires antialias false or SMAA
+      antialias: true, // True for smoother edges in minimal style
       alpha: false,
     });
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    this.renderer.toneMapping = THREE.ReinhardToneMapping;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.2;
 
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(LIGHTING_CONFIG.fogColor);
@@ -53,16 +54,16 @@ export class SceneManager {
     );
     this.camera.position.copy(CAMERA_CONFIG.startPosition);
 
-    // Post-processing setup
+    // Post-processing setup (Subtle bloom for softness)
     this.composer = new EffectComposer(this.renderer);
     const renderPass = new RenderPass(this.scene, this.camera);
     this.composer.addPass(renderPass);
 
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      1.5, // strength
-      0.4, // radius
-      0.85 // threshold
+      0.3, // Very low strength, just for softness
+      0.8, // radius
+      0.9  // threshold
     );
     this.composer.addPass(bloomPass);
 
@@ -70,8 +71,8 @@ export class SceneManager {
     this.city = new CityGenerator();
 
     this.overlay = document.getElementById('loadingOverlay');
-    
-    this.#createEnvironment();
+
+    // No environment grid anymore
   }
 
   /** Initializes base scene elements. */
@@ -93,12 +94,10 @@ export class SceneManager {
     const elapsed = performance.now() / 1000;
     this.bird.update(seconds, elapsed, gameState);
     this.city.update(seconds, elapsed, gameState);
-    this.#updateEnvironment(seconds);
   }
 
   /** Renders the scene. */
   render() {
-    // this.renderer.render(this.scene, this.camera);
     this.composer.render();
   }
 
@@ -124,40 +123,13 @@ export class SceneManager {
     directional.castShadow = true;
     directional.shadow.mapSize.width = 2048;
     directional.shadow.mapSize.height = 2048;
-    directional.shadow.camera.near = 0.5;
-    directional.shadow.camera.far = 50;
-    directional.shadow.camera.left = -20;
-    directional.shadow.camera.right = 20;
-    directional.shadow.camera.top = 20;
-    directional.shadow.camera.bottom = -20;
+    directional.shadow.bias = -0.0001;
     this.scene.add(directional);
 
-    // Add some colorful point lights for that neon feel
-    const p1 = new THREE.PointLight(0x00ffff, 50, 20);
-    p1.position.set(-5, 2, 0);
-    this.scene.add(p1);
-
-    const p2 = new THREE.PointLight(0xff00ff, 50, 20);
-    p2.position.set(5, 5, -5);
-    this.scene.add(p2);
-  }
-
-  #createEnvironment() {
-    // Grid Floor
-    const gridHelper = new THREE.GridHelper(200, 100, 0xff00ff, 0x220044);
-    gridHelper.position.y = -4;
-    this.scene.add(gridHelper);
-    this.grid = gridHelper;
-  }
-
-  #updateEnvironment(delta) {
-    // Move grid to simulate speed
-    if (this.grid) {
-      this.grid.position.z += delta * 10;
-      if (this.grid.position.z > 2) {
-        this.grid.position.z = -2; // Loop it
-      }
-    }
+    // Soft fill light from opposite side
+    const fillLight = new THREE.DirectionalLight(0xeef0ff, 0.5);
+    fillLight.position.set(-10, 10, -10);
+    this.scene.add(fillLight);
   }
 
   #hideOverlay() {
