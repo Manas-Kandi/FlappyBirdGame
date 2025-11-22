@@ -15,7 +15,24 @@ let lastTime = 0;
 async function init() {
   try {
     await sceneManager.init();
-    controls.attach();
+
+    controls.attach(() => {
+      if (gameState.state === 'ready') {
+        gameState.start();
+        sceneManager.bird.jump();
+      } else if (gameState.isPlaying()) {
+        sceneManager.bird.jump();
+      } else if (gameState.state === 'game-over') {
+        gameState.reset();
+        // Reset bird position
+        sceneManager.bird.group.position.y = 0;
+        sceneManager.bird.velocityY = 0;
+        sceneManager.bird.group.rotation.set(0, 0, 0);
+        // Reset city
+        sceneManager.city.group.position.x = 0;
+      }
+    });
+
     window.addEventListener('resize', () => sceneManager.handleResize());
     requestAnimationFrame(loop);
   } catch (error) {

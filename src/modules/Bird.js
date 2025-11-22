@@ -103,20 +103,35 @@ export class Bird {
     this.group.add(this.trail);
   }
 
-  update(deltaSeconds, elapsedSeconds) {
-    // Idle animation
-    const bob = Math.sin(elapsedSeconds * BIRD_CONFIG.idleSpeed) * BIRD_CONFIG.idleAmplitude;
-    // We only modify the visual mesh positions, not the group position which is controlled by physics
-    // But here, the group IS the bird. So we might want to apply bob to children or just let physics handle Y.
-    // The original code applied bob to group.position.y, which conflicts with physics if physics sets y.
-    // Assuming physics isn't implemented fully yet or controls y elsewhere.
-    // If this is just visual idle:
-    this.group.children.forEach(child => {
-      if (child !== this.trail) {
-        // child.position.y += bob * 0.01; // subtle vibration
-      }
-    });
+  jump() {
+    this.velocityY = 5; // Jump force
+  }
 
+  update(deltaSeconds, elapsedSeconds, gameState) {
+    // Physics
+    if (gameState.isPlaying()) {
+      this.velocityY -= 15 * deltaSeconds; // Gravity
+      this.group.position.y += this.velocityY * deltaSeconds;
+
+      // Floor collision
+      if (this.group.position.y < -3) {
+        this.group.position.y = -3;
+        this.velocityY = 0;
+        gameState.endGame();
+      }
+
+      // Ceiling collision
+      if (this.group.position.y > 8) {
+        this.group.position.y = 8;
+        this.velocityY = 0;
+      }
+    } else if (gameState.state === 'ready') {
+      // Idle hover
+      const bob = Math.sin(elapsedSeconds * BIRD_CONFIG.idleSpeed) * BIRD_CONFIG.idleAmplitude;
+      this.group.position.y = 0 + bob;
+    }
+
+    // Visuals
     // Rotate slightly based on velocity (fake banking)
     this.group.rotation.z = -this.velocityY * 0.1;
     this.group.rotation.x = this.velocityY * 0.05;

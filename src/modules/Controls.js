@@ -7,17 +7,19 @@ export class Controls {
     this.handlers = [];
   }
 
-  attach() {
+  attach(onJump) {
     if (this.isAttached) return;
 
     const jumpHandler = (event) => {
       if (event.code === 'Space') {
         event.preventDefault();
+        if (onJump) onJump();
       }
     };
 
     const clickHandler = (event) => {
       event.preventDefault();
+      if (onJump) onJump();
     };
 
     window.addEventListener('keydown', jumpHandler);
