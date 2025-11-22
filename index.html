@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flappy City 3D</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <main id="game-wrapper">
+      <canvas id="game-canvas" aria-label="Flappy City 3D gameplay area"></canvas>
+
+      <section class="ui-layer" aria-live="polite">
+        <p class="score-display" id="scoreDisplay">0</p>
+
+        <article class="modal-card" id="startCard">
+          <h1>Flappy City 3D</h1>
+          <p>Tap, click, or press <span>space</span> to leap between neon towers.</p>
+          <p class="subtext">Origami flight. Golden-hour skyline. Stay in rhythm.</p>
+        </article>
+
+        <article class="modal-card hidden" id="gameOverCard">
+          <h2>Flight Log</h2>
+          <p class="final-score" id="finalScore">Score: 0</p>
+          <p>Press <span>R</span> or tap to try again.</p>
+        </article>
+      </section>
+
+      <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader-ring"></div>
+        <p>Warming city lights...</p>
+      </div>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

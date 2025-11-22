@@ -1,0 +1,124 @@
+:root {
+  color-scheme: dark;
+  font-family: 'Zen Kaku Gothic New', 'Noto Sans JP', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --sky-top: #ff9a8b;
+  --sky-bottom: #662d8c;
+  --neon: #93f5ff;
+  --text: #fdf6f0;
+  --muted: #cbb4d4;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--sky-top), var(--sky-bottom));
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+#game-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#game-canvas {
+  width: 100%;
+  height: 100vh;
+  display: block;
+  cursor: crosshair;
+  pointer-events: auto;
+}
+
+.ui-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2rem;
+  pointer-events: none;
+}
+
+.score-display {
+  color: var(--text);
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: 700;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+}
+
+.modal-card {
+  margin-top: auto;
+  background: rgba(7, 7, 21, 0.65);
+  border-radius: 1.5rem;
+  padding: 1.75rem;
+  max-width: 360px;
+  width: 100%;
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text);
+  text-align: center;
+  pointer-events: auto;
+}
+
+.modal-card h1,
+.modal-card h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-card p {
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.modal-card span {
+  color: var(--neon);
+  font-weight: 600;
+}
+
+.modal-card.hidden {
+  display: none;
+}
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(4, 2, 15, 0.8);
+  color: var(--text);
+  gap: 1rem;
+  font-size: 1rem;
+}
+
+.loading-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.loader-ring {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--neon);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

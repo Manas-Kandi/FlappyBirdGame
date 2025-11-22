@@ -1,0 +1,25 @@
+{
+  "name": "flappy-city-3d",
+  "version": "1.0.0",
+  "description": "Flappy City 3D – minimalist Three.js experience",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "threejs",
+    "vite",
+    "game",
+    "flappy"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.181.1"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
